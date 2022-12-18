@@ -18,13 +18,12 @@ package com.alibaba.nacos.plugin.datasource.impl.mysql;
 
 import com.alibaba.nacos.plugin.datasource.constants.DataSourceConstant;
 import com.alibaba.nacos.plugin.datasource.constants.TableConstant;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ConfigInfoMapperByMySqlTest {
     
@@ -57,7 +56,7 @@ public class ConfigInfoMapperByMySqlTest {
     public void testFindConfigInfoByAppFetchRows() {
         String sql = configInfoMapperByMySql.findConfigInfoByAppFetchRows(0, 5);
         Assert.assertEquals(sql,
-                "SELECT id,data_id,group_id,tenant_id,app_name,content FROM config_info WHERE tenant_id LIKE ? AND app_name= ? LIMIT 0,5");
+                "SELECT id,data_id,group_id,tenant_id,app_name,content FROM config_info WHERE tenant_id LIKE ? AND app_name= ? OFFSET 0 LIMIT 5");
     }
     
     @Test
@@ -70,20 +69,20 @@ public class ConfigInfoMapperByMySqlTest {
     public void testGetTenantIdList() {
         String sql = configInfoMapperByMySql.getTenantIdList(0, 5);
         Assert.assertEquals(sql,
-                "SELECT tenant_id FROM config_info WHERE tenant_id != '' GROUP BY tenant_id LIMIT 0,5");
+                "SELECT tenant_id FROM config_info WHERE tenant_id != '' GROUP BY tenant_id OFFSET 0 LIMIT 5");
     }
     
     @Test
     public void testGetGroupIdList() {
         String sql = configInfoMapperByMySql.getGroupIdList(0, 5);
-        Assert.assertEquals(sql, "SELECT group_id FROM config_info WHERE tenant_id ='' GROUP BY group_id LIMIT 0,5");
+        Assert.assertEquals(sql, "SELECT group_id FROM config_info WHERE tenant_id ='' GROUP BY group_id OFFSET 0 LIMIT 5");
     }
     
     @Test
     public void testFindAllConfigKey() {
         String sql = configInfoMapperByMySql.findAllConfigKey(0, 5);
         Assert.assertEquals(sql, " SELECT data_id,group_id,app_name  FROM ( "
-                + " SELECT id FROM config_info WHERE tenant_id LIKE ? ORDER BY id LIMIT 0,5 )"
+                + " SELECT id FROM config_info WHERE tenant_id LIKE ? ORDER BY id OFFSET 0 LIMIT 5 )"
                 + " g, config_info t WHERE g.id = t.id  ");
     }
     
@@ -91,7 +90,7 @@ public class ConfigInfoMapperByMySqlTest {
     public void testFindAllConfigInfoBaseFetchRows() {
         String sql = configInfoMapperByMySql.findAllConfigInfoBaseFetchRows(0, 5);
         Assert.assertEquals(sql,
-                "SELECT t.id,data_id,group_id,content,md5 FROM ( SELECT id FROM config_info ORDER BY id LIMIT ?,?"
+                "SELECT t.id,data_id,group_id,content,md5 FROM ( SELECT id FROM config_info ORDER BY id OFFSET ? LIMIT ?"
                         + "  )  g, config_info t  WHERE g.id = t.id ");
     }
     
@@ -100,7 +99,7 @@ public class ConfigInfoMapperByMySqlTest {
         String sql = configInfoMapperByMySql.findAllConfigInfoFragment(0, 5);
         Assert.assertEquals(sql,
                 "SELECT id,data_id,group_id,tenant_id,app_name,content,md5,gmt_modified,type,encrypted_data_key "
-                        + "FROM config_info WHERE id > ? ORDER BY id ASC LIMIT 0,5");
+                        + "FROM config_info WHERE id > ? ORDER BY id ASC OFFSET 0 LIMIT 5");
     }
     
     @Test
@@ -126,7 +125,7 @@ public class ConfigInfoMapperByMySqlTest {
                 100);
         Assert.assertEquals(sql,
                 "SELECT id,data_id,group_id,tenant_id,app_name,content,type,md5,gmt_modified FROM config_info "
-                        + "WHERE  1=1  AND gmt_modified >=?  AND gmt_modified <=?  AND id > 100 ORDER BY id ASC LIMIT 0,5");
+                        + "WHERE  1=1  AND gmt_modified >=?  AND gmt_modified <=?  AND id > 100 ORDER BY id ASC OFFSET 0 LIMIT 5");
     }
     
     @Test
@@ -134,7 +133,7 @@ public class ConfigInfoMapperByMySqlTest {
         String sql = configInfoMapperByMySql.listGroupKeyMd5ByPageFetchRows(0, 5);
         Assert.assertEquals(sql,
                 "SELECT t.id,data_id,group_id,tenant_id,app_name,md5,type,gmt_modified,encrypted_data_key FROM "
-                        + "( SELECT id FROM config_info ORDER BY id LIMIT 0,5 ) g, config_info t WHERE g.id = t.id");
+                        + "( SELECT id FROM config_info ORDER BY id OFFSET 0 LIMIT 5 ) g, config_info t WHERE g.id = t.id");
     }
     
     @Test
@@ -155,7 +154,7 @@ public class ConfigInfoMapperByMySqlTest {
     public void testFindConfigInfoBaseLikeFetchRows() {
         String sql = configInfoMapperByMySql.findConfigInfoBaseLikeFetchRows(new HashMap<>(), 0, 5);
         Assert.assertEquals(sql,
-                "SELECT id,data_id,group_id,tenant_id,content FROM config_info WHERE  1=1 AND tenant_id=''  LIMIT 0,5");
+                "SELECT id,data_id,group_id,tenant_id,content FROM config_info WHERE  1=1 AND tenant_id=''  OFFSET 0 LIMIT 5");
     }
     
     @Test
@@ -169,14 +168,14 @@ public class ConfigInfoMapperByMySqlTest {
         String sql = configInfoMapperByMySql.findConfigInfo4PageFetchRows(new HashMap<>(), 0, 5);
         Assert.assertEquals(sql,
                 "SELECT id,data_id,group_id,tenant_id,app_name,content,type,encrypted_data_key FROM config_info"
-                        + " WHERE  tenant_id=?  LIMIT 0,5");
+                        + " WHERE  tenant_id=?  OFFSET 0 LIMIT 5");
     }
     
     @Test
     public void testFindConfigInfoBaseByGroupFetchRows() {
         String sql = configInfoMapperByMySql.findConfigInfoBaseByGroupFetchRows(0, 5);
         Assert.assertEquals(sql,
-                "SELECT id,data_id,group_id,content FROM config_info WHERE group_id=? AND tenant_id=? LIMIT 0,5");
+                "SELECT id,data_id,group_id,content FROM config_info WHERE group_id=? AND tenant_id=? OFFSET 0 LIMIT 5");
     }
     
     @Test
@@ -190,7 +189,7 @@ public class ConfigInfoMapperByMySqlTest {
         String sql = configInfoMapperByMySql.findConfigInfoLike4PageFetchRows(new HashMap<>(), 0, 5);
         Assert.assertEquals(sql,
                 "SELECT id,data_id,group_id,tenant_id,app_name,content,encrypted_data_key FROM config_info "
-                        + "WHERE  tenant_id LIKE ?  LIMIT 0,5");
+                        + "WHERE  tenant_id LIKE ?  OFFSET 0 LIMIT 5");
     }
     
     @Test
@@ -198,7 +197,7 @@ public class ConfigInfoMapperByMySqlTest {
         String sql = configInfoMapperByMySql.findAllConfigInfoFetchRows(0, 5);
         Assert.assertEquals(sql,
                 "SELECT t.id,data_id,group_id,tenant_id,app_name,content,md5  FROM (  SELECT id FROM config_info "
-                        + "WHERE tenant_id LIKE ? ORDER BY id LIMIT ?,? ) g, config_info t  WHERE g.id = t.id ");
+                        + "WHERE tenant_id LIKE ? ORDER BY id OFFSET ? LIMIT ? ) g, config_info t  WHERE g.id = t.id ");
     }
     
     @Test

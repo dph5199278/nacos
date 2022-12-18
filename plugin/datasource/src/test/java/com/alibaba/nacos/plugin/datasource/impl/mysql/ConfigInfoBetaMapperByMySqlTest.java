@@ -44,7 +44,7 @@ public class ConfigInfoBetaMapperByMySqlTest {
         String sql = configInfoBetaMapperByMySql.findAllConfigInfoBetaForDumpAllFetchRows(0, 5);
         Assert.assertEquals(sql,
                 " SELECT t.id,data_id,group_id,tenant_id,app_name,content,md5,gmt_modified,beta_ips,encrypted_data_key "
-                        + " FROM ( SELECT id FROM config_info_beta  ORDER BY id LIMIT " + 0 + "," + 5 + " )"
+                        + " FROM ( SELECT id FROM config_info_beta  ORDER BY id OFFSET " + 0 + " LIMIT " + 5 + " )"
                         + "  g, config_info_beta t WHERE g.id = t.id ");
     }
     

@@ -18,11 +18,10 @@ package com.alibaba.nacos.plugin.datasource.impl.mysql;
 
 import com.alibaba.nacos.plugin.datasource.constants.DataSourceConstant;
 import com.alibaba.nacos.plugin.datasource.constants.TableConstant;
+import java.util.HashMap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.HashMap;
 
 public class ConfigTagsRelationMapperByMySqlTest {
     
@@ -46,7 +45,7 @@ public class ConfigTagsRelationMapperByMySqlTest {
         String sql = configTagsRelationMapperByMySql.findConfigInfo4PageFetchRows(new HashMap<>(), 5, 0, 5);
         Assert.assertEquals(sql,
                 "SELECT a.id,a.data_id,a.group_id,a.tenant_id,a.app_name,a.content FROM config_info  a LEFT JOIN "
-                        + "config_tags_relation b ON a.id=b.id WHERE  a.tenant_id=?  AND b.tag_name IN (?, ?, ?, ?, ?)  LIMIT 0,5");
+                        + "config_tags_relation b ON a.id=b.id WHERE  a.tenant_id=?  AND b.tag_name IN (?, ?, ?, ?, ?)  OFFSET 0 LIMIT 5");
     }
     
     @Test
@@ -61,7 +60,7 @@ public class ConfigTagsRelationMapperByMySqlTest {
         String sql = configTagsRelationMapperByMySql.findConfigInfoLike4PageFetchRows(new HashMap<>(), 5, 0, 5);
         Assert.assertEquals(sql,
                 "SELECT a.id,a.data_id,a.group_id,a.tenant_id,a.app_name,a.content FROM config_info a LEFT JOIN"
-                        + " config_tags_relation b ON a.id=b.id  WHERE  a.tenant_id LIKE ?  AND b.tag_name IN (?, ?, ?, ?, ?)  LIMIT 0,5");
+                        + " config_tags_relation b ON a.id=b.id  WHERE  a.tenant_id LIKE ?  AND b.tag_name IN (?, ?, ?, ?, ?)  OFFSET 0 LIMIT 5");
     }
     
     @Test

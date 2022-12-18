@@ -20,7 +20,6 @@ import com.alibaba.nacos.plugin.datasource.constants.DataSourceConstant;
 import com.alibaba.nacos.plugin.datasource.constants.TableConstant;
 import com.alibaba.nacos.plugin.datasource.mapper.AbstractMapper;
 import com.alibaba.nacos.plugin.datasource.mapper.ConfigInfoAggrMapper;
-
 import java.util.List;
 
 /**
@@ -71,7 +70,7 @@ public class ConfigInfoAggrMapperByMySql extends AbstractMapper implements Confi
     @Override
     public String findConfigInfoAggrByPageFetchRows(int startRow, int pageSize) {
         return "SELECT data_id,group_id,tenant_id,datum_id,app_name,content FROM config_info_aggr WHERE data_id= ? AND "
-                + "group_id= ? AND tenant_id= ? ORDER BY datum_id LIMIT " + startRow + "," + pageSize;
+                + "group_id= ? AND tenant_id= ? ORDER BY datum_id OFFSET " + startRow + " LIMIT " + pageSize;
     }
     
     @Override

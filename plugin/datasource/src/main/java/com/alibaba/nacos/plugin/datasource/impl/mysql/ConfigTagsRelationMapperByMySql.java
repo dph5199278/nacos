@@ -21,7 +21,6 @@ import com.alibaba.nacos.plugin.datasource.constants.DataSourceConstant;
 import com.alibaba.nacos.plugin.datasource.constants.TableConstant;
 import com.alibaba.nacos.plugin.datasource.mapper.AbstractMapper;
 import com.alibaba.nacos.plugin.datasource.mapper.ConfigTagsRelationMapper;
-
 import java.util.Map;
 
 /**
@@ -90,7 +89,7 @@ public class ConfigTagsRelationMapperByMySql extends AbstractMapper implements C
             where.append('?');
         }
         where.append(") ");
-        return sql + where + " LIMIT " + startRow + "," + pageSize;
+        return sql + where + " OFFSET " + startRow + " LIMIT " + pageSize;
     }
     
     @Override
@@ -160,7 +159,7 @@ public class ConfigTagsRelationMapperByMySql extends AbstractMapper implements C
             where.append('?');
         }
         where.append(") ");
-        return sqlFetchRows + where + " LIMIT " + startRow + "," + pageSize;
+        return sqlFetchRows + where + " OFFSET " + startRow + " LIMIT " + pageSize;
     }
     
     @Override
